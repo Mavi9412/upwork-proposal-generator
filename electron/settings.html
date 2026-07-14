@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<style>
+  body { font-family: system-ui, sans-serif; padding: 24px; background: #111; color: #eee; }
+  h2 { margin-top: 0; font-size: 16px; }
+  p { font-size: 13px; color: #aaa; }
+  input { width: 100%; box-sizing: border-box; padding: 8px; margin: 12px 0; font-size: 14px; }
+  button { padding: 8px 16px; font-size: 14px; cursor: pointer; }
+  a { color: #6cf; }
+</style>
+</head>
+<body>
+  <h2>One-time setup</h2>
+  <p>Enter your Gemini API key to enable proposal generation. Get one at
+  <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a>.
+  You can leave this blank and set it later.</p>
+  <input id="key" type="password" placeholder="Gemini API key" />
+  <button id="save">Save &amp; Continue</button>
+  <script>
+    document.getElementById("save").addEventListener("click", () => {
+      window.settingsAPI.save(document.getElementById("key").value.trim());
+    });
+  </script>
+</body>
+</html>
