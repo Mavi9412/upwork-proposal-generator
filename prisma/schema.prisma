@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Profile {
+  id           String   @id @default(uuid())
+  name         String   @default("My Profile")
+  rawText      String
+  skills       String   // JSON string
+  experience   String   // JSON string
+  projects     String   // JSON string
+  achievements String   // JSON string
+  tools        String   // JSON string
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model JobPost {
+  id                 String     @id @default(uuid())
+  rawText            String
+  title              String?
+  description        String?
+  budget             String?
+  requiredSkills     String?    // JSON string
+  screeningQuestions String?    // JSON string
+  proposals          Proposal[]
+  createdAt          DateTime   @default(now())
+}
+
+model Proposal {
+  id            String   @id @default(uuid())
+  jobId         String
+  job           JobPost  @relation(fields: [jobId], references: [id])
+  mode          String   // "Honest" | "Confident"
+  content       String
+  answers       String?  // JSON string
+  isEdited      Boolean  @default(false)
+  editedContent String?
+  isSaved       Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
