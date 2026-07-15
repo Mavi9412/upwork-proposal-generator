@@ -252,6 +252,10 @@ export default function Home() {
                 <input type="checkbox" checked={style === "Hook"} onChange={(e) => setStyle(e.target.checked ? "Hook" : "")} />
                 Hook (long-term / relationship)
               </label>
+              <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer" }}>
+                <input type="checkbox" checked={style === "Concise"} onChange={(e) => setStyle(e.target.checked ? "Concise" : "")} />
+                Concise (~100 words)
+              </label>
             </div>
 
             <button type="submit" className="btn-primary" disabled={isGenerating}>

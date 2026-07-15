@@ -65,6 +65,18 @@ export async function POST(req) {
       - Para 3 — Process/methodology: how you actually work (bug reporting format, retest workflow, etc.), concrete not generic.
       - Para 4 — One-liner reinforcing traits (detail oriented, structured, clear communication).
       - Close: a short forward-looking line, e.g. "Looking forward to contributing to your project."`
+        : style === "Concise"
+        ? `STRUCTURE (Concise style, a tight ~100 word proposal in this exact pattern):
+      - Hard limit applies to the MAIN proposal only (greeting through the closing): aim for about 100 words, never more than 120. Every line earns its place.
+      - If the job post has screening questions, the "Answers to your questions:" section is SEPARATE and does NOT count toward the ~100 words. Never fold the answers into the main proposal to stay under the limit; keep the main proposal ~100 words and answer the questions below it.
+      - Greeting: a simple "Dear [client's name if it appears in the job post, otherwise 'Client']," on its own line. No fluff.
+      - Line 1 — Experience statement: name the specific tools/products from the profile and what you focus on.
+      - Line 2 — Direct tie-in to their specific project or need from the job post.
+      - Line 3 — Process/methodology: how you actually work (e.g. bug reporting format, retest workflow), concrete not generic.
+      - Line 4 — One short line reinforcing traits (detail oriented, structured, clear communication).
+      - Closing: exactly "Looking forward to contributing to your project." then "Regards," on the next line, followed by the freelancer's name if it can be told from the profile.
+      - This fixed closing REPLACES the "end with a question" rule for this style. Do not end with a question.
+      - Keep it as short lines/sentences following the order above, not one dense block.`
         : "";
 
       const lengthInstruction = isShort
@@ -93,6 +105,7 @@ export async function POST(req) {
       ${rawText}
 
       Reminder before you write: zero dashes (–/—), exactly one stat, zero "X but Y" constructions, plain paragraphs only. These rules are mandatory, not optional.
+      ${style === "Concise" ? 'Concise style override: the MAIN proposal is about 100 words (greeting + 4 short lines + fixed closing), ending with "Looking forward to contributing to your project." then "Regards," and the name. Do NOT end with a question. Any screening-question answers go in a separate "Answers to your questions:" section below and are NOT counted in the ~100 words.' : ""}
       Write the cover letter / proposal text.`;
 
       const response = await ai.models.generateContent({
