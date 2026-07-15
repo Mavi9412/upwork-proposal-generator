@@ -6,6 +6,7 @@ import Link from "next/link";
 export default function Home() {
   const [jobText, setJobText] = useState("");
   const [mode, setMode] = useState("Honest");
+  const [style, setStyle] = useState("");
   const [isShort, setIsShort] = useState(false);
   const [noProfile, setNoProfile] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -44,7 +45,7 @@ export default function Home() {
       const res = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ rawText: jobText, mode, isShort, noProfile, profileId: selectedProfileId }),
+        body: JSON.stringify({ rawText: jobText, mode, style, isShort, noProfile, profileId: selectedProfileId }),
       });
 
       if (res.ok) {
@@ -55,6 +56,7 @@ export default function Home() {
       }
     } catch (error) {
       console.error(error);
+      alert("Couldn't reach the server. Make sure the app/dev server is running, then try again.");
     } finally {
       setIsGenerating(false);
     }
@@ -156,8 +158,18 @@ export default function Home() {
                     setSearchQuery(e.target.value);
                     setIsDropdownOpen(true);
                   }}
-                  onFocus={() => setIsDropdownOpen(true)}
-                  onBlur={() => setTimeout(() => setIsDropdownOpen(false), 200)}
+                  onFocus={() => {
+                    setSearchQuery("");
+                    setIsDropdownOpen(true);
+                  }}
+                  onBlur={() => setTimeout(() => {
+                    setIsDropdownOpen(false);
+                    setSearchQuery((q) => {
+                      if (q) return q;
+                      const selected = profiles.find((p) => p.id === selectedProfileId);
+                      return selected ? selected.name : q;
+                    });
+                  }, 200)}
                 />
                 
                 {isDropdownOpen && (
@@ -227,6 +239,18 @@ export default function Home() {
               <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer", marginLeft: "1rem" }}>
                 <input type="checkbox" checked={isShort} onChange={(e) => setIsShort(e.target.checked)} />
                 Short
+              </label>
+            </div>
+
+            <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+              <span style={{ fontWeight: 600 }}>Style (optional):</span>
+              <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer" }}>
+                <input type="checkbox" checked={style === "Direct"} onChange={(e) => setStyle(e.target.checked ? "Direct" : "")} />
+                Direct (one-off jobs)
+              </label>
+              <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer" }}>
+                <input type="checkbox" checked={style === "Hook"} onChange={(e) => setStyle(e.target.checked ? "Hook" : "")} />
+                Hook (long-term / relationship)
               </label>
             </div>
 

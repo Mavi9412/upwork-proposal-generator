@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 export async function POST(req) {
   try {
-    const { rawText, mode, isShort, profileId, noProfile } = await req.json();
+    const { rawText, mode, style, isShort, profileId, noProfile } = await req.json();
     if (!rawText) return new Response(JSON.stringify({ error: "Missing job text" }), { status: 400 });
 
     const apiKey = process.env.GEMINI_API_KEY;
@@ -49,6 +49,24 @@ export async function POST(req) {
       - Never use an em dash (—) or en dash (–) anywhere. Use a comma, period, or parentheses instead.
       - Before finalizing, silently check your own draft against these rules and rewrite any sentence that breaks one.`;
 
+      const styleInstruction = style === "Hook"
+        ? `STRUCTURE (Hook/Relationship style, use for long-term roles or when a contact name/company is given):
+      - Open with one reflective sentence connecting personally to this specific role or what it represents. Tie it to something concrete in the job post, not a generic statement.
+      - Then a credibility paragraph: relevant platforms/industries plus day-to-day tasks.
+      - Then a paragraph on what you personally enjoy about this kind of work, backed by a concrete example.
+      - Then a paragraph on process/collaboration (workflow, tools, how you report issues or work with a team).
+      - If the post signals an ongoing or long-term engagement, add a short paragraph framing interest in becoming a long-term part of the team.
+      - Close by offering to discuss how you can contribute to the company, naming it if known.`
+        : style === "Direct"
+        ? `STRUCTURE (Direct/Standard style, use for one-off jobs or short gigs):
+      - Simple greeting, no fluff.
+      - Para 1 — Experience statement: name specific tools/products relevant to your background and what you focus on.
+      - Para 2 — Direct tie-in to their specific project or need mentioned in the job post.
+      - Para 3 — Process/methodology: how you actually work (bug reporting format, retest workflow, etc.), concrete not generic.
+      - Para 4 — One-liner reinforcing traits (detail oriented, structured, clear communication).
+      - Close: a short forward-looking line, e.g. "Looking forward to contributing to your project."`
+        : "";
+
       const lengthInstruction = isShort
         ? "Keep the proposal short: 3-4 short paragraphs max, no filler, only the strongest points. Cut anything that doesn't directly help win this job."
         : "";
@@ -57,6 +75,7 @@ export async function POST(req) {
 
       INSTRUCTIONS:
       ${toneInstruction}
+      ${styleInstruction}
       ${humanizationInstruction}
       ${lengthInstruction}
       Keep the proposal structured and focused on the client's needs. Do not use generic greetings like "Dear Hiring Manager".
@@ -89,6 +108,7 @@ export async function POST(req) {
       data: {
         jobId: jobPost.id,
         mode,
+        style: style || "None",
         content: generatedContent,
       }
     });

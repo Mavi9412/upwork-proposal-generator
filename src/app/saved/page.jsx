@@ -124,7 +124,7 @@ export default function SavedProposals() {
                   {proposal.job?.rawText || "No job text available."}
                 </p>
                 <span style={{ fontSize: "0.8rem", color: "var(--text-muted)", marginTop: "0.5rem", display: "inline-block" }}>
-                  {new Date(proposal.createdAt).toLocaleDateString()} • {proposal.mode} Mode
+                  {new Date(proposal.createdAt).toLocaleDateString()} • {proposal.mode} Mode • {proposal.style || "No"} Style
                 </span>
               </div>
 

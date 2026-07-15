@@ -38,11 +38,11 @@
     },
     "files": [
       "electron/**/*",
-      ".next/standalone/**/*",
       "package.json"
     ],
     "extraResources": [
-      { "from": "build/template.db", "to": "template.db" }
+      { "from": "build/template.db", "to": "template.db" },
+      { "from": ".next/standalone", "to": "app/.next/standalone", "filter": ["**/*", "!.env"] }
     ],
     "win": {
       "target": "nsis"

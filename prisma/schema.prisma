@@ -42,6 +42,7 @@ model Proposal {
   jobId         String
   job           JobPost  @relation(fields: [jobId], references: [id])
   mode          String   // "Honest" | "Confident"
+  style         String   @default("Direct") // "Direct" | "Hook"
   content       String
   answers       String?  // JSON string
   isEdited      Boolean  @default(false)
