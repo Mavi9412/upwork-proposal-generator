@@ -6,6 +6,7 @@ import Link from "next/link";
 export default function Home() {
   const [jobText, setJobText] = useState("");
   const [mode, setMode] = useState("Honest");
+  const [style, setStyle] = useState("");
   const [isShort, setIsShort] = useState(false);
   const [noProfile, setNoProfile] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -44,7 +45,7 @@ export default function Home() {
       const res = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ rawText: jobText, mode, isShort, noProfile, profileId: selectedProfileId }),
+        body: JSON.stringify({ rawText: jobText, mode, style, isShort, noProfile, profileId: selectedProfileId }),
       });
 
       if (res.ok) {
@@ -227,6 +228,10 @@ export default function Home() {
               <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer", marginLeft: "1rem" }}>
                 <input type="checkbox" checked={isShort} onChange={(e) => setIsShort(e.target.checked)} />
                 Short
+              </label>
+              <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer", marginLeft: "1rem" }}>
+                <input type="checkbox" checked={style === "Concise"} onChange={(e) => setStyle(e.target.checked ? "Concise" : "")} />
+                Concise (~100 words)
               </label>
             </div>
 
